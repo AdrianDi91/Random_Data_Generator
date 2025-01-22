@@ -1,13 +1,18 @@
 import time
 import threading
-import random
+import random, logging
 
 class Functions:
     def __init__(self):
         self.is_generating = False
 
+        self.logger = logging.getLogger(__name__)
+        logging.basicConfig(filename="RandomData.log", level=logging.INFO, filemode="a+",
+                                format="%(asctime)s - %(levelname)s - %(message)s", datefmt='%m/%d/%Y %I:%M:%S')
+
     def gen_data(self):                #https://www.influxdata.com/blog/how-convert-timestamp-to-datetime-in-python/
          
+        self.logger.info("Started Login")
         x_data = []
         y_data = []       
          
@@ -20,9 +25,10 @@ class Functions:
             actual_time = end_time - start_time
             y_data.append(actual_time)
             print(x_data[-1], y_data[-1])
+            self.logger.info(f"Added {x_data[-1]} as random number after {y_data[-1]} secs ")
             time.sleep(5) 
     
-            print(x_data, y_data)
+        print(x_data, y_data)
     
     def start_generation(self):
         self.is_generating = True
