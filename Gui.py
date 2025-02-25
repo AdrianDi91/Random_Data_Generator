@@ -1,9 +1,13 @@
 import sys
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QTimer
 from PyQt6.QtWidgets import ( QApplication, QMainWindow, QVBoxLayout, QHBoxLayout,
 QLabel, QWidget, QPushButton, QLineEdit)
 from PyQt6.QtGui import QFont
 import pyqtgraph as pg
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 import random
 import time
 import threading
@@ -12,10 +16,13 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class UI_MainWindow(object):
-    def setupUI(self, Mainwindow):
-        
-        Mainwindow.setObjectName("Random Data Generator")
-        self.setWindowTitle("Random Data Generator")
+    def setupUI(self, MainWindow):
+        MainWindow.setObjectName("Random Data Generator")
+        MainWindow.setWindowTitle("Random Data Generator")
+
+
+        # MainWindow.setObjectName("Random Data Generator")
+        # self.setWindowTitle("Random Data Generator")
         self.is_generating = False
         self.gen_thread = None
 
@@ -38,7 +45,13 @@ class UI_MainWindow(object):
         # label.setFont(font)
         # labelf.setPointSize(30)
         
-        self.graphWidget = pg.PlotWidget()
+        self.graphWidget = pg.PlotWidget(title="Random_Data")
+        self.graphWidget.setBackground('w')
+        self.graphWidget.showGrid(True, True)
+        # self.figure = Figure()
+        # self.ax = self.figure.add_subplot(111)
+        # self.canvas = FigureCanvas(self.figure)
+
         self.start_button = QPushButton("Start")
         #self.start_button.clicked.connect(self.start_generation)
         self.stop_button = QPushButton("Stop")
@@ -48,6 +61,7 @@ class UI_MainWindow(object):
         
         #add widgets to layout
         self.layout4.addWidget(self.graphWidget)
+        #self.layout4.addWidget(self.canvas)
         self.layout5.addWidget(self.start_button)
         self.layout6.addWidget(self.stop_button)
         self.layout7.addWidget(self.logdata_button)
@@ -63,9 +77,19 @@ class UI_MainWindow(object):
         self.layout3.addLayout(self.layout7)
         self.layout3.addLayout(self.layout8)
         
-        self.widget = QWidget()
-        self.widget.setLayout(self.layout1)
-        self.setCentralWidget(self.widget)
+        # self.widget = QWidget()
+        # self.widget.setLayout(self.layout1)
+        # self.setCentralWidget(self.widget)
+
+        container = QWidget()
+        container.setLayout(self.layout1)
+        MainWindow.setCentralWidget(container)
+
+    # def update_graph(self):
+                 
+    #     self.x_data = self.x_data
+    #     self.y_data = self.y_data
+    #     self.graphWidget.plot(self.x_data, self.y_data)
 
     """def gen_data(self):                #https://www.influxdata.com/blog/how-convert-timestamp-to-datetime-in-python/
         print("Hallo")
